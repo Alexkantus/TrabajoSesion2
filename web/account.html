@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!---->
+<!---->
+<!---->
+<html lang="en">
+<head>
+    <title>My Accounts</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../logo.png">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="assets/css/style.css" title="Normal">
+    <link rel="alternate stylesheet" href="assets/css/dark-mode.css" title="Dark mode" id="dark-mode-css">
+
+    <script src="clases.js" defer></script>
+    <script src="assets/js/account.js" defer></script>
+    
+    <link rel="stylesheet" href="/DigitalBank/assets/h5p-player/styles/h5p.css">
+    <script src="/DigitalBank/assets/h5p-player/main.bundle.js"></script>
+</head>
+
+<body class="table-page">
+
+<!-- NAVBAR -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a class="navbar-brand" href="index.html" aria-label="Go to home page">
+                <i class="fas fa-university" aria-hidden="true"></i>
+                <span>Digital Bank</span>
+            </a>            
+            
+            <div class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="index.html" aria-label="Home page">Home</a></li>
+                    <li><a href="../about.html" aria-label="About us page">About Us</a></li>
+                    <li><a href="../services.html" aria-label="Services page">Services</a></li>
+                </ul>             
+            </div>
+        </div>
+    </nav>
+
+<main class="container-form" role="main">
+    <section class="form-card" aria-labelledby="pageTitle">
+        <div class="form-header">
+            <h1 id="pageTitle">My Accounts</h1>
+            <p>Manage your bank accounts</p>
+        </div>
+
+        <div class="accounts-toolbar">
+            <button type="button" class="submit-btn" onclick="showCreateAccountForm()" aria-label="Create new account">
+                <i class="fas fa-plus" aria-hidden="true"></i> Create account
+            </button>
+
+            <button type="button" class="submit-btn" onclick="toggleDeleteMode()" aria-label="Delete selected accounts">
+                <i class="fas fa-trash" aria-hidden="true"></i> Delete accounts
+            </button>
+
+            <button type="button" class="submit-btn" id="confirmDeleteBtn" onclick="confirmDelete()" style="display:none;"
+                    aria-label="Confirm delete selected accounts">
+                <i class="fas fa-check" aria-hidden="true"></i> Confirm delete
+            </button>
+        </div>
+
+        <!-- CREATE -->
+        <div id="createAccountContainer" class="modal-overlay" role="dialog" aria-labelledby="createTitle">
+            <div class="modal-card">
+                <h2 id="createTitle">Create Account</h2>
+
+                <form id="createAccountForm">
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" id="description" name="description" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="beginBalance">Begin Balance</label>
+                        <input type="text" id="beginBalance" name="beginBalance">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type">Account Type</label>
+                        <select id="type" name="type" onchange="toggleCreditLine()" required>
+                            <option value="0">STANDARD</option>
+                            <option value="1">CREDIT</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="creditLineContainer" style="display:none;">
+                        <label for="creditLine">Credit Line</label>
+                        <input type="number" id="creditLine" name="creditLine" min="0" max="10000">
+                    </div>
+                    
+                    <div id="responseMsgSignUp" class="alert-message" style="display:none;"></div>
+
+                    <button type="submit" class="submit-btn" aria-label="Create account">Create</button>
+                    <button type="button" class="submit-btn" onclick="hideCreateAccountForm()" aria-label="Cancel account creation">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- UPDATE -->
+        <div id="updateAccountContainer" class="modal-overlay" role="dialog" aria-labelledby="updateTitle">
+            <div class="modal-card">
+                <h2 id="updateTitle">Update Account</h2>
+
+                <form id="updateAccountForm">
+                    <div class="form-group">
+                        <label for="updateDescription">Description</label>
+                        <input type="text" id="updateDescription" name="updateDescription" required>
+                    </div>
+
+                    <div class="form-group" id="updateCreditLineContainer" style="display:none;">
+                        <label for="updateCreditLine">Credit Line</label>
+                        <input type="number" id="updateCreditLine" name="updateCreditLine" min="0" max="10000">
+                    </div>
+
+                    <button type="submit" class="submit-btn" aria-label="Update account">Update</button>
+                    <button type="button" class="submit-btn" onclick="hideUpdateForm()" aria-label="Cancel account update">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="accountsTable" class = "Table">
+                <caption>List of bank accounts for the current customer</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Balance</th>
+                        <th scope="col">Credit Line</th>
+                        <th scope="col">Begin Balance</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top:30px;">
+            <button type="button" class="submit-btn" onclick="toggleTutorial()" aria-label="Button to show video">
+                <i class="fas fa-circle-play" aria-hidden="true"></i> Tutorial
+            </button>
+        </div>
+
+        <div id="tutorialBox" style="display:none; margin-top:20px;">
+            <div id="h5p-container" style=" ">
+            <h1>Help Video</h1>
+            <video width="640" height="360" controls style="margin-top: 10px;">
+                <source src="/DigitalBank/assets/Videos/account.mp4" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
+        </div>
+        </div>
+
+
+    </section>
+</main>
+
+<script></script>
+
+</body>
+</html>
